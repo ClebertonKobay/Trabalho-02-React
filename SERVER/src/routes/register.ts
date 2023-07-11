@@ -20,7 +20,7 @@ export async function register(app:FastifyInstance) {
         })
 
         if(validUserName){
-            return response.send('Este username já esta sendo usado, escolha outro');
+            return response.send({error:'Este username já esta sendo usado, escolha outro'});
         }
 
         const passWordHash = await argon2.hash(passWord);

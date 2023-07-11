@@ -1,6 +1,9 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FormControl, InputLabel, Typography, Box, FilledInput, InputAdornment, IconButton, Button  } from "@mui/material";
+import { api } from "../utils/api";
+import Cookies from "universal-cookie";
 
 interface FormValues {
     userName: string;
@@ -14,6 +17,7 @@ export function Register(){
             passWord: "",
             showPassword: false,
         });
+        const navigate = useNavigate();
      
         const handleChange = (prop:keyof FormValues) => (event: React.ChangeEvent<HTMLInputElement>) => {
             setValues({ ...values, [prop]: event.target.value });
@@ -30,9 +34,23 @@ export function Register(){
             event.preventDefault();
         };
      
-        const handleFormSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const handleFormSubmit = async (event: React.ChangeEvent<HTMLInputElement>) => {
             event.preventDefault();
-            alert("Signed in successfully");
+            const response = await api.post('/user',{
+                "userName": values.userName,
+                "passWord": values.passWord
+            })
+            if(response.data.error){
+                alert(response.data.error)
+                return
+            }
+
+            const {token} = response.data
+            const cookie = new Cookies();
+
+            cookie.set('token',token, {path:'/', maxAge:604800})
+            alert("Usuário cadastrado com sucesso")
+            return navigate('/')
         };
      
         return (
@@ -102,7 +120,7 @@ export function Register(){
                         />
                     </FormControl>
                     <Button type="submit" variant="contained">
-                        Login
+                        Register
                     </Button>
                 </Box>
             </div>

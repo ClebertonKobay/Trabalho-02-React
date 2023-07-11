@@ -2,7 +2,12 @@ import './App.css'
 import Root from './utils/routes'
 import {  Box, Card } from '@mui/material'
 import LoginBtn from './components/LoginBtn'
+import { getUser } from './utils/auth'
+import AvatarImg from './components/Avatar'
 function App() {
+  
+  const user = getUser();
+
   return (
     <>
     <Box
@@ -14,8 +19,8 @@ function App() {
           alignItems:'center',
           justifyContent:'end',
         }}
-    >
-      <LoginBtn />
+    >{user ? <AvatarImg userName={user.userName}></AvatarImg>: <LoginBtn />}
+      
     </Box>
     <Card 
       sx={{
