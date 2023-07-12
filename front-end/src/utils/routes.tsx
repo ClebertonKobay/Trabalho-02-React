@@ -1,35 +1,39 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import {GroupAdd, Person4} from '@mui/icons-material';
+import { GroupAdd, Person4 } from '@mui/icons-material';
 import { Link } from "react-router-dom";
 
-export default function Root(){
-    return(
-      <>
-        <Box>
-          <List>
-            <ListItem>
+export default function Root() {
+  return (
+    <>
+      <Box>
+        <List>
+          <ListItem>
+            <Link to={`character/create`}>
               <ListItemButton>
                 <ListItemIcon >
-                <GroupAdd />
+                  <GroupAdd />
                 </ListItemIcon>
                 <ListItemText>
-                  <Link to={`character/create`}>Criar um Personagem</Link>
+                  Criar um Personagem
                 </ListItemText>
               </ListItemButton>
-            </ListItem>
-            <ListItem>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link to={`character/list`}>
               <ListItemButton>
                 <ListItemIcon >
-                <Person4 />
+                  <Person4 />
                 </ListItemIcon>
                 <ListItemText>
-                  <Link to={`character/list`}>Listar os seus Personagens</Link>
+                  Listar os seus Personagens
                 </ListItemText>
               </ListItemButton>
-            </ListItem>
-          </List>
-        </Box>
+            </Link>
+          </ListItem>
+        </List>
+      </Box>
 
-      </>
-    )
+    </>
+  )
 }

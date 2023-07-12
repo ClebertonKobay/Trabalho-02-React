@@ -19,7 +19,7 @@ function App() {
           alignItems:'center',
           justifyContent:'end',
         }}
-    >{user ? <AvatarImg userName={user.userName}></AvatarImg>: <LoginBtn />}
+    >{user ? <AvatarImg userName={user.userName}></AvatarImg> : <LoginBtn />}
       
     </Box>
     <Card 

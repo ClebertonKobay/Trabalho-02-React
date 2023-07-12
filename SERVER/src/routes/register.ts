@@ -56,12 +56,13 @@ export async function register(app:FastifyInstance) {
         })
 
         const {userName, passWord} = bodySchema.parse(request.body);
-
-        const user = await prisma.user.findFirstOrThrow({
-            where:{
-                userName
-            }
-        });
+        
+        try {
+            const user = await prisma.user.findFirstOrThrow({
+                where:{
+                    userName
+                }
+            });
 
         const userPassWord = await prisma.password.findFirstOrThrow({
             where:{
@@ -79,7 +80,10 @@ export async function register(app:FastifyInstance) {
              
             return {token};
         }
-        return response.status(401).send({error:"Senha incorreta"})
+            return response.status(401).send({error:"Senha incorreta"})
+        } catch (error) {
+            return response.status(401).send({error:"Usuário não cadastrado"})
+        }
 
     });
 }
