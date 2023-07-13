@@ -14,6 +14,23 @@ export async function characterRoutes(app: FastifyInstance){
                     userId:request.user.sub
                 }
             });
+
+            return characters
+        });
+
+    app.get('/character/:id',async (request,response)=>{
+            const paramsSchema = z.object({
+                id: z.string()
+            })
+
+            const {id} = paramsSchema.parse(request.params)
+
+            const characters = await prisma.character.findFirst({
+                where:{
+                    id
+                }
+            });
+
             return characters
         });
 
