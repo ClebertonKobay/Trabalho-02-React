@@ -7,17 +7,14 @@ import './index.css'
 import { Register } from './pages/Register.tsx'
 import { Login } from './pages/Login.tsx'
 import { Create } from './pages/character/Create.tsx'
+import { List } from './pages/character/List.tsx'
+import { Edit } from './pages/character/Edit.tsx'
 
 const router = createBrowserRouter([
   {
     path:'/',
     element: <App />, 
     errorElement:<Error />,
-    children:[
-      {
-        
-      }
-    ]
   },
   {
     path:'/register',
@@ -32,6 +29,14 @@ const router = createBrowserRouter([
   {
     path:'/character/create',
     element:<Create />
+  },
+  {
+    path:'/character/list',
+    element:<List />
+  },
+  {
+    path:'/character/:id',
+    element:<Edit />
   }
 ]);
 

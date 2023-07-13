@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FormControl, InputLabel, Typography, Box, FilledInput, InputAdornment, Button } from "@mui/material";
 import { api } from "../../utils/api";
 import Cookies from "universal-cookie";
-import decode from "jwt-decode";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface FormValues {
     name: string;
@@ -14,31 +14,14 @@ interface FormValues {
     wisdom: string;
     charisma: string;
     image: string;
-    userId: string;
 }
 
-interface Token {
-    sub: string;
-}
-
-export function Create() {
+export function Edit() {
     const cookie = new Cookies();
     const navigate = useNavigate();
-
-    const [userId, setUserId] = useState<string>('')
-
-    useEffect(() => {
-        const tokenCript = cookie.get('token')
-
-        if (!tokenCript) {
-            alert('Precisa estra logado para acessar essa função')
-            navigate('/');
-        }
-
-        const token: Token = decode(tokenCript);
-        setUserId(token.sub);
-    }, [])
-
+    const params = useParams()
+    let replay;
+    
     const [values, setValues] = useState<FormValues>({
         name: "",
         strength: "",
@@ -48,8 +31,23 @@ export function Create() {
         wisdom: "",
         charisma: "",
         image: "",
-        userId: userId
     });
+
+    useEffect(() => {
+        const tokenCript = cookie.get('token')
+
+        if (!tokenCript) {
+            alert('Precisa estra logado para acessar essa função')
+            navigate('/');
+        }
+
+        replay = api.get(`/character/${params.id}`,{
+            headers:{
+                Authorization:`Bearer ${tokenCript}`
+            }
+        }).then((response)=>{setValues(response.data)})
+    }, [replay])
+
 
     const handleChange = (prop: keyof FormValues) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -60,7 +58,7 @@ export function Create() {
 
         console.log(values.charisma, typeof (values.charisma));
 
-        const response = await api.post('/character', {
+        const response = await api.put(`/character/${params.id}`, {
             name: values.name,
             strength: Number.parseInt(values.strength),
             dexterity: Number.parseInt(values.dexterity),
@@ -69,7 +67,6 @@ export function Create() {
             wisdom: Number.parseInt(values.wisdom),
             charisma: Number.parseInt(values.charisma),
             image: values.image,
-            userId: values.userId,
         }, {
             headers: {
                 Authorization: `Bearer ${cookie.get('token')}`,
@@ -80,8 +77,8 @@ export function Create() {
             return
         }
 
-        alert("Personagem criado com sucesso")
-        return navigate('/')
+        alert("Personagem atualizado com sucesso")
+        return navigate('/character/list')
     };
 
     return (
@@ -97,7 +94,7 @@ export function Create() {
                 }}
             >
                 <Typography fontWeight={600}>
-                    Cadastro
+                    {`Atualização do ${values.name}`}
                 </Typography>
             </div>
             <br />
@@ -204,7 +201,7 @@ export function Create() {
                     />
                 </FormControl>
                 <Button type="submit" variant="contained" color="success">
-                    Criar
+                    Update
                 </Button>
             </Box>
         </div>

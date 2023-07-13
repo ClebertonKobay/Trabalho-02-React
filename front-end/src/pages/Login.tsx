@@ -140,7 +140,7 @@ export function Login(){
                         />
                     </FormControl>
                     <Button type="submit" variant="contained">
-                        Register
+                        Login
                     </Button>
                 </Box>
             </div>
